@@ -1,0 +1,88 @@
+﻿@model Clothes33.Models.ClothingItem
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Payment</h1>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2>Cart Items:</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.Name</td>
+                            <td>$@Model.Price</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Card Payment</h2>
+                <form method="post" action="@Url.Action("ProcessPayment", "Home", new { id = Model.Id })">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" class="form-control" id="cvv" name="cvv" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btnn" onclick="gg">Make Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('btnn').addEventListener('click', function () {
+                var cardNumber = document.getElementById('cardNumber').value;
+                var cvv = document.getElementById('cvv').value;
+                var expiryDate = document.getElementById('expiryDate').value;
+
+                // Assuming you have fields for Name, Price, and Quantity in your view
+                var name = '@Model.Name';
+                var price = @Model.Price;
+                var quantity = 1; // Assuming a fixed quantity for now
+
+                // Call the InsertPaymentData method using AJAX
+                $.ajax({
+                    url: '@Url.Action("InsertPaymentData", "Home")',
+                    method: 'POST',
+                    data: {
+                        name: name,
+                        price: price,
+                        quantity: quantity,
+                        cardNumber: cardNumber
+                    },
+                    success: function () {
+                        // Redirect to the payment success page or show a success message
+                        // For example:
+                        window.location.href = '@Url.Action("InsertPaymentData", "Home")';
+                    },
+                    error: function () {
+                        // Handle error if needed
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
